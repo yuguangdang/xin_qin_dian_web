@@ -1,0 +1,12 @@
+/* src/styles/colors.module.css */
+:root {
+    --primary-color: #3498db;
+    --secondary-color: #2ecc71;
+    --accent-color-light: #e7e6e6;
+    --accent-color-dark: #979797;
+    --border-color-dark: #b9b8b8;
+    --text-color-highlight: #333;
+    --text-color-muted: #b1aeae;
+    --background-color: #fff;
+  }
+  

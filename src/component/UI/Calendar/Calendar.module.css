@@ -1,0 +1,89 @@
+.calendar {
+    display: grid;
+    grid-template-rows: auto 1fr; /* One row for the header, one for the body */
+    font-family: Arial, sans-serif;
+    height: 80vh; /* Or the height you prefer */
+    width: 80%;
+    overflow: hidden; /* Prevent overall grid from scrolling */
+    border: 1px solid var(--accent-color-light);
+    border-radius: 0.5rem;
+}
+
+.calendarHeader {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr); /* Align with the 8-day grid */
+}
+
+.calendarDay {
+    text-align: center;
+    border-right: 1px solid var(--accent-color-light);
+    padding: 0.5rem 2rem;
+    color: var(--text-color-highlight);
+}
+
+.timeZoneHeader {
+    display: flex;
+    align-items: center;
+    justify-content: center; 
+    border-right: 1px solid var(--accent-color-light);
+    border-bottom: 1px solid var(--accent-color-light);
+    color: var(--text-color-highlight);
+    font-size: 80%;
+}
+
+.timeLabel {
+    display: flex;
+    align-items: end;
+    justify-content: center; 
+    font-size: small;
+}
+
+.hoveredTimeLabel {
+    border-bottom: 1px solid black;
+    cursor: pointer; 
+}
+
+.lastTimeLabel {
+    /* Specific styles for the last time label */
+    visibility: hidden;
+}
+
+.dayOfWeek {
+    font-size: small;
+    font-weight: bold;
+    color: var(--text-color-muted);
+}
+
+.calendarDay:last-child {
+    border-right: none;
+}
+
+.calendarBody {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr); /* Align with the 8-day grid */
+    overflow-y: auto; /* Enable vertical scrolling */
+}
+
+.calendarTimeSlots {
+    position: relative; /* This will be the reference for absolute positioning */
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+}
+
+.calendarSlot {
+    border-left: 1px solid var(--accent-color-light);
+    border-top: 1px solid var(--accent-color-light);
+    padding: 10px;
+    text-align: center;
+    height: 30px; /* Adjust height as needed */
+    background-color: #fdfbfb;
+}
+
+/* Optional: Hide the scrollbar while still allowing scrolling */
+.calendarBody::-webkit-scrollbar {
+    display: none; /* For Chrome, Safari, Opera */
+}
+.calendarBody {
+    -ms-overflow-style: none; /* For Internet Explorer, Edge */
+    scrollbar-width: none; /* For Firefox */
+}

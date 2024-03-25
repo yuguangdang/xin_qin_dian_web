@@ -96,10 +96,7 @@ const Calendar: React.FC = () => {
                 {timeSlots.map((slot, slotIndex) => {
                     const isFirstSlotOfDay = slotIndex % 7 === 0;
                     const isLastTimeLabel = slotIndex === lastTimeLabelIndex; // Check if this is the last time label
-                    const isHoveredRow =  hoveredTimeLabelIndex && Math.floor(hoveredTimeLabelIndex / 7) === Math.floor(slotIndex / 7);
-                    isHoveredRow && console.log("kajsdflkjdsfkljsdkljf")
-                    // console.log(hoveredTimeLabelIndex)
-                    // console.log(slotIndex)
+                    const isHoveredRow = hoveredTimeLabelIndex !== null && Math.floor(hoveredTimeLabelIndex / 7) === Math.floor(slotIndex / 7);
 
                     return (
                         <React.Fragment key={slotIndex}>

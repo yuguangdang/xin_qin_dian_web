@@ -85,7 +85,7 @@ const Calendar: React.FC = () => {
   const [startDate, setStartDate] = useState<Date>(startDateInit); // Today's date
   const weekDates: WeekDates = generateWeekDates(startDate);
   const [renderSideBar, setRenderSideBar] = useState(false);
-  const [slotSelected, setSlotSelected] = useState<TimeSlot|null>(null);
+  const [slotSelected, setSlotSelected] = useState<TimeSlot | null>(null);
 
   const [timeSlots, setTimeSlots] = useState<TimeSlots>(
     generateTimeSlots(startDate)
@@ -124,7 +124,7 @@ const Calendar: React.FC = () => {
     const newTimeSlots = generateTimeSlots(startDate);
     const a = getAllTutors();
     const b = toRenderList(newTimeSlots);
-    getTutorById("65c16017088252490d325bf7").then((res) => {
+    getTutorById("6631d1b558f8a646ddbef920").then((res) => {
       // res.data.availableSlots
       const copiedTimeSlots = _.cloneDeep(newTimeSlots);
 
@@ -148,7 +148,7 @@ const Calendar: React.FC = () => {
                   startTime.getHours().toString()
                 ][startTime.getMinutes().toString()];
 
-              if (slot.startTime.toString() == thisSlot.startTime.toString()) {
+              if (slot.startTime.toString() === thisSlot.startTime.toString()) {
                 copiedTimeSlots[startTime.getDate().toString()][
                   startTime.getHours().toString()
                 ][startTime.getMinutes().toString()] = slot;
@@ -261,9 +261,7 @@ const Calendar: React.FC = () => {
             })}
           </div>
         </div>
-        {renderSideBar && <div>
-        hello
-        </div>}
+        {renderSideBar && <div>hello</div>}
       </div>
     </div>
   );

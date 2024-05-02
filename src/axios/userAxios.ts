@@ -1,5 +1,5 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
-import {type TimeSlot, type  WeekDates, type  TimeSlots, type  TutorRes} from '../utils/tpyes';
+import {type TimeSlot, type  WeekDates, type  TimeSlots, type  TutorRes, type LoginRes} from '../utils/tpyes';
 const USERAPIURL = 'api/auth'
 const register = ( email : string, password : string, role : string)=>{
 
@@ -8,7 +8,7 @@ const register = ( email : string, password : string, role : string)=>{
 })} //  const { email, password, role } = req.body;
 
 
-const login = ( email : string, password : string,)=>{
+const login = ( email : string, password : string,): Promise<LoginRes>=>{
 
   return axios.post(`${USERAPIURL}/login`,  {
     email, password

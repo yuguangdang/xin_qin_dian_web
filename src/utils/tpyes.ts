@@ -47,9 +47,14 @@ interface IStudent {
 interface TutorRes {
   data:ITutor
 }
-
+interface LoginRes {
+  data:{
+    user: IUser,
+    token: string
+  }
+}
 interface TutorsRes {
   data:ITutor[];
 }
 
-export { type TimeSlot, type WeekDates, type TimeSlots, type TutorRes, type TutorsRes, type ITutor };
+export { type TimeSlot, type WeekDates, type TimeSlots, type TutorRes, type TutorsRes, type ITutor, type LoginRes };

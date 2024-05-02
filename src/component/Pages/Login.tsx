@@ -23,7 +23,9 @@ const LoginPage = ()=>{
       <button
         onClick={() => {
           login(email, password).then(
-            () => navigate("")
+            (res) => {localStorage.setItem("UID", res.data.user._id); 
+            localStorage.setItem("role", res.data.user.role); 
+            localStorage.setItem("token", res.data.token); navigate("/tutor");} // 
           );
         }}
       >

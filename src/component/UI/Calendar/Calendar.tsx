@@ -263,7 +263,7 @@ const Calendar = (props: {TutorId:string}) => {
           </div>
         </div>
         {renderSideBar && <div>
-        hello
+        Slot Details
         </div>}
       </div>
     </div>

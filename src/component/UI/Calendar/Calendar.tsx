@@ -12,7 +12,7 @@ import {
   type TimeSlot,
   type WeekDates,
   type TimeSlots,
-  type tutorRes,
+  type TutorRes,
 } from "../../../utils/tpyes";
 import { time } from "console";
 import * as _ from "lodash";
@@ -80,7 +80,8 @@ const setAvailabilityWithSlots = (availability: TimeSlots): TimeSlots => {
   return availability;
 };
 
-const Calendar: React.FC = () => {
+const Calendar = (props: {TutorId:string}) => {
+  const TutorId = props.TutorId
   const startDateInit = new Date();
   const [startDate, setStartDate] = useState<Date>(startDateInit); // Today's date
   const weekDates: WeekDates = generateWeekDates(startDate);
@@ -124,7 +125,7 @@ const Calendar: React.FC = () => {
     const newTimeSlots = generateTimeSlots(startDate);
     const a = getAllTutors();
     const b = toRenderList(newTimeSlots);
-    getTutorById("65c16017088252490d325bf7").then((res) => {
+    getTutorById(TutorId).then((res) => {
       // res.data.availableSlots
       const copiedTimeSlots = _.cloneDeep(newTimeSlots);
 

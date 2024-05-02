@@ -1,3 +1,5 @@
+import { Interface } from "readline";
+
 // Interfaces
 interface TimeSlot {
   startTime: Date;
@@ -12,16 +14,42 @@ interface TimeSlots {
   [day: string]: { [hour: string]: { [minute: string]: TimeSlot } };
 }
 
-interface tutorRes {
-  data: {
-    _id: string;
-    email: string;
-    name: string;
-    password: string;
-    reviews: string[];
-    subjects: string[];
-    availableSlots: TimeSlot[];
-  };
+interface ITutor {
+  _id: string;
+  name: string;
+  subjects: string[];
+  availableSlots: TimeSlot[];
+  reviews: {
+    studentId: string;
+    review: string;
+    rating: number;
+    timestamp: Date;
+  }[];
 }
 
-export { type TimeSlot, type WeekDates, type TimeSlots, type tutorRes };
+interface IUser {
+  _id: string;
+  email: string;
+  password: string;
+  role: 'student' | 'tutor';
+  profileId?: string;
+}
+
+interface IStudent {
+  _id: string;
+  name: string;
+  subjectsOfInterest: string[];
+  bookedSessions: {
+    tutorId: string
+    slotId: string;
+  }[];
+}
+interface TutorRes {
+  data:ITutor
+}
+
+interface TutorsRes {
+  data:ITutor[];
+}
+
+export { type TimeSlot, type WeekDates, type TimeSlots, type TutorRes, type TutorsRes, type ITutor };

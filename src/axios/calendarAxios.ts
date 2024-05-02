@@ -1,5 +1,5 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
-import {type TimeSlot, type  WeekDates, type  TimeSlots, type  tutorRes} from '../utils/tpyes';
+import {type TimeSlot, type  WeekDates, type  TimeSlots, type  TutorRes, type TutorsRes} from '../utils/tpyes';
 
 axios.defaults.baseURL = 'http://localhost:3001';
 
@@ -9,12 +9,12 @@ const cancelBooking = ()=>{}
 const TUTORAPIURL = '/api/tutors'
 
 
-const getTutorById = (id: string): Promise<tutorRes>=>{
+const getTutorById = (id: string): Promise<TutorRes>=>{
   return axios.get(`${TUTORAPIURL}/getTutorById/${id}`)
 }
 
 
-const getAllTutors = (): Promise<tutorRes[]>=>{
+const getAllTutors = (): Promise<TutorsRes>=>{
   return axios.get(`${TUTORAPIURL}/getAllTutors/`)
 }
 

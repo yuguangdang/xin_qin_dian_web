@@ -12,7 +12,7 @@ import {
   type TimeSlot,
   type WeekDates,
   type TimeSlots,
-  type tutorRes,
+  type TutorRes,
 } from "../../../utils/tpyes";
 import { time } from "console";
 import * as _ from "lodash";
@@ -80,12 +80,13 @@ const setAvailabilityWithSlots = (availability: TimeSlots): TimeSlots => {
   return availability;
 };
 
-const Calendar: React.FC = () => {
+const Calendar = (props: {TutorId:string}) => {
+  const TutorId = props.TutorId
   const startDateInit = new Date();
   const [startDate, setStartDate] = useState<Date>(startDateInit); // Today's date
   const weekDates: WeekDates = generateWeekDates(startDate);
   const [renderSideBar, setRenderSideBar] = useState(false);
-  const [slotSelected, setSlotSelected] = useState<TimeSlot | null>(null);
+  const [slotSelected, setSlotSelected] = useState<TimeSlot|null>(null);
 
   const [timeSlots, setTimeSlots] = useState<TimeSlots>(
     generateTimeSlots(startDate)
@@ -124,7 +125,7 @@ const Calendar: React.FC = () => {
     const newTimeSlots = generateTimeSlots(startDate);
     const a = getAllTutors();
     const b = toRenderList(newTimeSlots);
-    getTutorById("6631d1b558f8a646ddbef920").then((res) => {
+    getTutorById(TutorId).then((res) => {
       // res.data.availableSlots
       const copiedTimeSlots = _.cloneDeep(newTimeSlots);
 
@@ -148,7 +149,7 @@ const Calendar: React.FC = () => {
                   startTime.getHours().toString()
                 ][startTime.getMinutes().toString()];
 
-              if (slot.startTime.toString() === thisSlot.startTime.toString()) {
+              if (slot.startTime.toString() == thisSlot.startTime.toString()) {
                 copiedTimeSlots[startTime.getDate().toString()][
                   startTime.getHours().toString()
                 ][startTime.getMinutes().toString()] = slot;
@@ -261,7 +262,9 @@ const Calendar: React.FC = () => {
             })}
           </div>
         </div>
-        {renderSideBar && <div>hello</div>}
+        {renderSideBar && <div>
+        Slot Details
+        </div>}
       </div>
     </div>
   );

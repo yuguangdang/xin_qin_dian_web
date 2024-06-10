@@ -24,6 +24,7 @@ const LoginPage = ()=>{
         onClick={() => {
           login(email, password).then(
             (res) => {localStorage.setItem("UID", res.data.user._id); 
+            localStorage.setItem("PID", res.data.user.profileId); 
             localStorage.setItem("role", res.data.user.role); 
             localStorage.setItem("token", res.data.token); navigate("/tutor");} // 
           );

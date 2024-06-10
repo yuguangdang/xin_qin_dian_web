@@ -32,7 +32,7 @@ interface IUser {
   email: string;
   password: string;
   role: 'student' | 'tutor';
-  profileId?: string;
+  profileId: string;
 }
 
 interface IStudent {
@@ -50,7 +50,7 @@ interface TutorRes {
 interface LoginRes {
   data:{
     user: IUser,
-    token: string
+    token: string,
   }
 }
 interface TutorsRes {

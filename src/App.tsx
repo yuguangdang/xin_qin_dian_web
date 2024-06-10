@@ -4,7 +4,7 @@ import styles from "./App.module.css"; // Import the CSS module
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./component/Pages/Login";
 import Register from "./component/Pages/Register";
-import TutorPage from "./component/Pages/TutorPage";
+import UserPage from "./component/Pages/UserPage";
 function App() {
   return (
     <div className={styles.appContainer}>
@@ -12,7 +12,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/tutor" element={<TutorPage />} />
+          <Route path="/tutor" element={<UserPage />} />
         </Routes>
       </BrowserRouter>
     </div>

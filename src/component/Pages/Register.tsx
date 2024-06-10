@@ -7,12 +7,16 @@ const Register = () => {
   const [registerStudent, setRegisterStudent] = useState<boolean>(true);
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [name, setName] = useState<string>("");
   const navigate = useNavigate();
   const changeEmailHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
   };
   const changePasswdHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
+  };
+  const changeNameHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    setName(e.target.value);
   };
   return (
     <>
@@ -26,12 +30,15 @@ const Register = () => {
       <div>
         Email:
         <input onChange={changeEmailHandler} value={email} />
+        Name:
+        <input onChange={changeNameHandler} value={name} />
+
         PassWord:
         <input onChange={changePasswdHandler} value={password} />
       </div>
       <button
         onClick={() => {
-          register(email, password, registerStudent ? "student" : "tutor").then(
+          register(email, password, name, registerStudent ? "student" : "tutor").then(
             () => navigate("")
           );
         }}

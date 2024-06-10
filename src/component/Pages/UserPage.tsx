@@ -10,7 +10,7 @@ import MenuItem from '@mui/material/MenuItem';
 import { type ITutor, type TutorsRes } from "../../utils/tpyes";
 import Calendar from "../UI/Calendar/Calendar";
 import { ClassNames } from "@emotion/react";
-const TutorPage = () => {
+const UserPage = () => {
   const [tutors, setTutors] = useState<ITutor[]>([]);
   const [selectedTutor, setSelectTutor] = useState<string>("default");
   const handleChangeSelectTutor = (e: SelectChangeEvent) => {
@@ -24,7 +24,8 @@ const TutorPage = () => {
   }, []);
   return (
     <>
-      Select Tutor
+     {localStorage.getItem("role")!="tutor"?<>
+     Select Tutor
       <Select
         labelId="demo-simple-select-label"
         id="demo-simple-select"
@@ -36,8 +37,9 @@ const TutorPage = () => {
           return <MenuItem value={tutor._id}>{tutor.name}</MenuItem>
         })}
       </Select>
-      {selectedTutor !="default" ? <Calendar TutorId={selectedTutor} /> : <></>}
+      {selectedTutor !="default" ? <Calendar TutorId={localStorage.getItem("role")=="tutor"?localStorage.getItem("PID")!:selectedTutor} /> : <></>}
+     </>:<Calendar TutorId={localStorage.getItem("role")=="tutor"?localStorage.getItem("PID")!:selectedTutor} /> }
     </>
   );
 };
-export default TutorPage;
+export default UserPage;

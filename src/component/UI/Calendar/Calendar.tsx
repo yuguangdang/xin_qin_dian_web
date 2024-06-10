@@ -6,6 +6,9 @@ import {
   cancelBooking,
   getAllTutors,
   getTutorById,
+  updateTutorById,
+  bookSession,
+  cancelSession,
 } from "../../../axios/calendarAxios";
 
 import {
@@ -14,8 +17,8 @@ import {
   type TimeSlots,
   type TutorRes,
 } from "../../../utils/tpyes";
-import { time } from "console";
 import * as _ from "lodash";
+import { wait } from "@testing-library/user-event/dist/utils";
 // Helper functions
 const generateWeekDates = (startDate: Date): WeekDates => {
   const dates: WeekDates = [];
@@ -57,7 +60,6 @@ const generateTimeSlots = (startDate: Date): TimeSlots => {
       }
     }
   }
-  console.log(slots);
   return slots;
 };
 
@@ -72,7 +74,6 @@ const toRenderList = (slots: TimeSlots): TimeSlot[] => {
     }
   }
   const renderList = slotsList.slice(0, 48).concat(slotsList);
-  console.log(renderList);
   return renderList;
 };
 
@@ -80,14 +81,47 @@ const setAvailabilityWithSlots = (availability: TimeSlots): TimeSlots => {
   return availability;
 };
 
-const Calendar = (props: {TutorId:string}) => {
-  const TutorId = props.TutorId
+const Calendar = (props: { TutorId: string }) => {
+  const TutorId = props.TutorId;
   const startDateInit = new Date();
   const [startDate, setStartDate] = useState<Date>(startDateInit); // Today's date
   const weekDates: WeekDates = generateWeekDates(startDate);
   const [renderSideBar, setRenderSideBar] = useState(false);
-  const [slotSelected, setSlotSelected] = useState<TimeSlot|null>(null);
+  const [slotSelected, setSlotSelected] = useState<TimeSlot | null>(null);
+  const [getTutorByIdResTimeSlot, setGetTutorByIdTimeSlot] = useState<
+    TimeSlot[] | null
+  >(null);
+  const [, updateState] = useState<any>();
+  const forceUpdate = React.useCallback(() => updateState({}), []);
+  const openSlot = async (slot: TimeSlot) => {
+    if (getTutorByIdResTimeSlot) {
+      let availableSlots = _.cloneDeep(getTutorByIdResTimeSlot);
+      availableSlots.push(slot);
+      await updateTutorById(localStorage.getItem("PID")!, {
+        availableSlots: availableSlots,
+      });
+    }
+    slot.isBooked = false;
 
+    forceUpdate();
+  };
+  const closeSlot = async (slot: TimeSlot) => {
+    if (getTutorByIdResTimeSlot) {
+      let availableSlots = _.cloneDeep(getTutorByIdResTimeSlot);
+      availableSlots = availableSlots.filter((availableSlot) => {
+        return (
+          new Date(availableSlot.startTime).getTime() !=
+          new Date(slot.startTime).getTime()
+        );
+      });
+      await updateTutorById(localStorage.getItem("PID")!, {
+        availableSlots: availableSlots,
+      });
+    }
+    slot.isBooked = null;
+
+    forceUpdate();
+  };
   const [timeSlots, setTimeSlots] = useState<TimeSlots>(
     generateTimeSlots(startDate)
   );
@@ -120,16 +154,17 @@ const Calendar = (props: {TutorId:string}) => {
       </div>
     ); // Format: "FRI" on top of "02"
   };
+
   const lastTimeLabelIndex = toRenderList(timeSlots).length - 7;
   useEffect(() => {
     const newTimeSlots = generateTimeSlots(startDate);
     const a = getAllTutors();
     const b = toRenderList(newTimeSlots);
-    getTutorById(TutorId).then((res) => {
+    getTutorById(TutorId).then((res: any) => {
       // res.data.availableSlots
       const copiedTimeSlots = _.cloneDeep(newTimeSlots);
-
-      res.data.availableSlots.forEach((slot) => {
+      setGetTutorByIdTimeSlot(res.data.availableSlots);
+      res.data.availableSlots.forEach((slot: any) => {
         const startTime = new Date(slot.startTime);
         slot.startTime = new Date(slot.startTime);
         slot.endTime = new Date(slot.endTime);
@@ -160,7 +195,7 @@ const Calendar = (props: {TutorId:string}) => {
       });
       setTimeSlots(copiedTimeSlots);
     });
-  }, [startDate]);
+  }, [startDate, TutorId]);
   return (
     <div style={{ width: "100%" }}>
       <div style={{ width: "100%" }}>
@@ -253,8 +288,10 @@ const Calendar = (props: {TutorId:string}) => {
                         setSlotSelected(slot);
                       }}
                     >
-                      {slot.isBooked ? "booked" : ""}
-                      {slot.startTime.toString()}
+                      {localStorage.getItem("role") == "tutor"
+                        ? slot.bookedBy
+                        : ""}
+                      {/* {slot.startTime.toString()} */}
                     </div>
                   )}
                 </React.Fragment>
@@ -262,9 +299,80 @@ const Calendar = (props: {TutorId:string}) => {
             })}
           </div>
         </div>
-        {renderSideBar && <div>
-        Slot Details
-        </div>}
+        {renderSideBar && (
+          <div>
+            Slot Details
+            {localStorage.getItem("role") == "student" ? (
+              <div>
+                {slotSelected?.isBooked === null ? (
+                  <>This seesion is not open</>
+                ) : (
+                  <>
+                    {slotSelected?.isBooked === false ? (
+                      <button
+                        onClick={async() => {
+                          if (localStorage.getItem("PID")) {
+                            await bookSession(localStorage.getItem("PID")!, TutorId, [
+                              slotSelected,
+                            ]);
+                            slotSelected.isBooked = true;
+                            forceUpdate();
+  
+                          }
+                        }}
+                      >
+                        Book session
+                      </button>
+                    ) : slotSelected?.bookedBy ===
+                      localStorage.getItem("PID") ? (
+                      <button
+                        onClick={async() => {if (localStorage.getItem("PID")) {
+                          await cancelSession(localStorage.getItem("PID")!, TutorId, [
+                            slotSelected,
+                          ]);
+                          slotSelected.isBooked = false;
+                          forceUpdate();
+                        }
+                        }}
+                      >
+                        Cancel booking
+                      </button>
+                    ) : (
+                      <>This session is booked by others</>
+                    )}
+                  </>
+                )}
+              </div>
+            ) : (
+              <div>
+                {slotSelected?.isBooked === null ? (
+                  <button
+                    onClick={() => {
+                      openSlot(slotSelected);
+                    }}
+                  >
+                    Open slot
+                  </button>
+                ) : (
+                  <>
+                    {slotSelected?.isBooked === false ? (
+                      <button
+                        onClick={() => {
+                          closeSlot(slotSelected);
+                        }}
+                      >
+                        Close slot
+                      </button>
+                    ) : (
+                      <></>
+                    )}
+                  </>
+                )}
+              </div>
+            )}
+            <></>
+          </div>
+        )}
       </div>
     </div>
   );
